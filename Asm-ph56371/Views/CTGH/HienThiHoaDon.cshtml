@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Hóa Đơn Thanh Toán";
+}
+
+<h1>Hóa Đơn Thanh Toán</h1>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (ViewBag.Cart != null && ViewBag.Cart.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên Sản Phẩm</th>
+                <th>Giá</th>
+                <th>Số Lượng</th>
+                <th>Tổng Tiền</th>
+        <tbody>
+            @foreach (var product in ViewBag.Cart)
+            {
+                <tr>
+                    <td>@product.TenSanPham</td>
+                    <td>@product.Gia.ToString("C")</td>
+                    <td>@product.SoLuongTonKho</td>
+                    <td>@(product.Gia.HasValue ? product.Gia.Value * product.SoLuongTonKho : 0).ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Tổng Tiền Sản Phẩm: @ViewBag.TotalAmount.ToString("C")</h3>
+            <h4>Phí Ship: @ViewBag.ShippingFee.ToString("C")</h4>
+            <h3>Tổng Thanh Toán: @ViewBag.TotalPrice.ToString("C")</h3>
+        </div>
+
+        <div class="col-md-6 text-right">
+            <!-- Nút để người dùng xác nhận thanh toán -->
+            <form method="post" action="@Url.Action("ThanhToan", "CTGH")">
+                <button type="submit" class="btn btn-success btn-lg">Xác Nhận Thanh Toán</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Giỏ hàng của bạn hiện tại trống.
+    </div>
+}

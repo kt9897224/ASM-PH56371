@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Asm_ph56371.Models.HoaDon>
+
+<h1>Danh Sách Hóa Đơn</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã Hóa Đơn</th>
+            <th>Người Tạo (Email)</th>
+            <th>Tổng Tiền</th>
+            <th>Ngày Tạo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hoaDon in Model)
+        {
+            <tr>
+                <td>@hoaDon.hoaDonId</td>
+                <td>@hoaDon.NguoiDung?.Email</td> <!-- Hiển thị email người tạo -->
+                <td>@hoaDon.TongTien.ToString("C")</td>
+                <td>@hoaDon.NgayTao.ToString("dd/MM/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

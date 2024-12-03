@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Giỏ Hàng";
+}
+
+<h1>Giỏ Hàng Của Bạn</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+@if (ViewBag.Cart != null && ViewBag.Cart.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên Sản Phẩm</th>
+                <th>Giá</th>
+                <th>Số Lượng</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in ViewBag.Cart)
+            {
+                <tr>
+                    <td>@product.TenSanPham</td>
+                    <td>@product.Gia.ToString("C")</td>
+                    <td>
+                        <form method="post" action="@Url.Action("UpdateCart", "Home")">
+                            <input type="hidden" name="productId" value="@product.SPId" />
+                            <button type="submit" name="action" value="decrease" class="btn btn-sm btn-warning">-</button>
+                            <span>@product.SoLuongTonKho</span>
+                            <button type="submit" name="action" value="increase" class="btn btn-sm btn-success">+</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="@Url.Action("Xoa", "CTGH")">
+                            <input type="hidden" name="productId" value="@product.SPId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Tổng Tiền: @ViewBag.TotalAmount.ToString("C")</h3>
+            <h4>Tiền Ship: @ViewBag.ShippingFee.ToString("C")</h4>
+            <h3>Tổng Thanh Toán: @ViewBag.TotalPrice.ToString("C")</h3>
+        </div>
+
+        <div class="col-md-6 text-right">
+            <form method="post" action="@Url.Action("ThanhToan", "CTGH")">
+                <button type="submit" class="btn btn-success btn-lg">Thanh Toán</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Giỏ hàng của bạn hiện tại trống.
+    </div>
+}

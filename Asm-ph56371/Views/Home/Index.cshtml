@@ -1,0 +1,57 @@
+﻿@model List<Asm_ph56371.Models.SanPham>
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Danh sách Sản phẩm</h2>
+
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@Url.Content($"~/images/{product.IMGURL}")" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.TenSanPham</h5>
+                        <p class="card-text">@string.Format("{0:C}", product.Gia)</p>
+                        <p class="card-text">@product.MoTa</p>
+                       <form method="post" action="@Url.Action("AddToCart", "Home")" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productId" value="@product.SPId" />
+                             <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Phân trang -->
+    <div class="d-flex justify-content-center mt-4">
+        <ul class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })">«</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })">»</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
